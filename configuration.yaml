@@ -1,0 +1,48 @@
+homeassistant: false
+permit_join: true
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://localhost:1883
+  keepalive: 60
+  password: FuckTheMqtt66
+  reject_unauthorized: true
+  user: mqtt
+  version: 4
+serial:
+  port: \\.\COM4
+advanced:
+  pan_id: 44010
+  channel: 14
+  network_key:
+    - 247
+    - 217
+    - 72
+    - 83
+    - 103
+    - 12
+    - 71
+    - 8
+    - 190
+    - 130
+    - 138
+    - 174
+    - 255
+    - 129
+    - 149
+    - 241
+  homeassistant_legacy_entity_attributes: false
+  legacy_api: false
+  legacy_availability_payload: false
+  last_seen: ISO_8601_local
+  log_level: info
+device_options:
+  legacy: false
+frontend:
+  port: 8080
+devices: devices.yaml
+external_converters:
+  - MIKE.CC2530.js
+  - MIKE.ESP32-C3.js
+  - MIKE.ESP32-C6.js
+  #- MIKE.ESP32C6_CO2.js
+availability: false
