@@ -1,1 +1,5 @@
 log
+/coordinator_backup.json
+/database.db
+/devices.yaml
+/state.json
