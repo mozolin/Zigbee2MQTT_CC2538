@@ -1,286 +1,159 @@
-ENDPOINTS: [
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [0, 3, 1026, 1029, 1027],
-    outputClusters: [10, 25],
-    profileID: 260,
-    ID: 1,
-    clusters: {
-      genBasic: [Object],
-      msTemperatureMeasurement: [Object],
-      msRelativeHumidity: [Object],
-      msPressureMeasurement: [Object]
-    },
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [
-      [Object],
-      [Object],
-      [Object]
+useBH1750: true
+useCustomEPBH1750: false
+lastEPNumС6: 4
+expItemsС6: [
+  Numeric {
+    name: 'humidity',
+    label: 'Humidity',
+    access: 1,
+    type: 'numeric',
+    endpoint: 'l1',
+    property: 'humidity_l1',
+    description: 'BMX280 humidity sensor #1',
+    features: undefined,
+    unit: '%',
+    value_max: undefined,
+    value_min: undefined,
+    value_step: undefined,
+    presets: undefined
+  },
+  Numeric {
+    name: 'pressure',
+    label: 'Pressure',
+    access: 1,
+    type: 'numeric',
+    endpoint: 'l1',
+    property: 'pressure_l1',
+    description: 'BMX280 pressure sensor #1',
+    features: undefined,
+    unit: 'hPa',
+    value_max: undefined,
+    value_min: undefined,
+    value_step: undefined,
+    presets: undefined
+  },
+  Numeric {
+    name: 'temperature',
+    label: 'Temperature',
+    access: 1,
+    type: 'numeric',
+    endpoint: 'l1',
+    property: 'temperature_l1',
+    description: 'BMX280 temperature sensor #1',
+    features: undefined,
+    unit: '°C',
+    value_max: undefined,
+    value_min: undefined,
+    value_step: undefined,
+    presets: undefined
+  },
+  Numeric {
+    name: 'illuminance',
+    label: 'Illuminance',
+    access: 1,
+    type: 'numeric',
+    endpoint: 'l1',
+    property: 'illuminance_l1',
+    description: 'BH1750 illuminance sensor #1',
+    features: undefined,
+    unit: 'lux',
+    value_max: undefined,
+    value_min: undefined,
+    value_step: undefined,
+    presets: undefined
+  },
+  Numeric {
+    name: 'illuminance_lux',
+    label: 'Illuminance (lux)',
+    access: 1,
+    type: 'numeric',
+    endpoint: 'l1',
+    property: 'illuminance_lux_l1',
+    description: 'BH1750 illuminance sensor #1, lux',
+    features: undefined,
+    unit: 'luxxx',
+    value_max: undefined,
+    value_min: undefined,
+    value_step: undefined,
+    presets: undefined
+  },
+  Numeric {
+    name: 'temperature',
+    label: 'Temperature',
+    access: 1,
+    type: 'numeric',
+    endpoint: 'l2',
+    property: 'temperature_l2',
+    description: 'DS18B20 temperature sensor #2',
+    features: undefined,
+    unit: '°C',
+    value_max: undefined,
+    value_min: undefined,
+    value_step: undefined,
+    presets: undefined
+  },
+  Numeric {
+    name: 'temperature',
+    label: 'Temperature',
+    access: 1,
+    type: 'numeric',
+    endpoint: 'l3',
+    property: 'temperature_l3',
+    description: 'DS18B20 temperature sensor #3',
+    features: undefined,
+    unit: '°C',
+    value_max: undefined,
+    value_min: undefined,
+    value_step: undefined,
+    presets: undefined
+  },
+  Numeric {
+    name: 'temperature',
+    label: 'Temperature',
+    access: 1,
+    type: 'numeric',
+    endpoint: 'l4',
+    property: 'temperature_l4',
+    description: 'DS18B20 temperature sensor #4',
+    features: undefined,
+    unit: '°C',
+    value_max: undefined,
+    value_min: undefined,
+    value_step: undefined,
+    presets: undefined
+  }
+] epItemsС6: {
+  l1: 1,
+  l2: 2,
+  l3: 3,
+  l4: 4
+}
+fromZigbeeC6: [
+  {
+    cluster: 'msTemperatureMeasurement',
+    type: ['attributeReport', 'readResponse'],
+    convert: [Function: convert]
+  },
+  {
+    cluster: 'msRelativeHumidity',
+    type: ['attributeReport', 'readResponse'],
+    options: [
+      [Numeric],
+      [Numeric]
     ],
-    _configuredReportings: [
-      [Object],
-      [Object],
-      [Object]
+    convert: [Function: convert]
+  },
+  {
+    cluster: 'msPressureMeasurement',
+    type: ['attributeReport', 'readResponse'],
+    options: [
+      [Numeric],
+      [Numeric]
     ],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 1,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 2,
-    clusters: {
-      msTemperatureMeasurement: [Object]
-    },
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [
-      [Object]
-    ],
-    _configuredReportings: [
-      [Object]
-    ],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 2,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 3,
-    clusters: {
-      msTemperatureMeasurement: [Object]
-    },
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [
-      [Object]
-    ],
-    _configuredReportings: [
-      [Object]
-    ],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 3,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 4,
-    clusters: {
-      msTemperatureMeasurement: [Object]
-    },
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [
-      [Object]
-    ],
-    _configuredReportings: [
-      [Object]
-    ],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 4,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 5,
-    clusters: {},
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [],
-    _configuredReportings: [],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 5,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 6,
-    clusters: {},
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [],
-    _configuredReportings: [],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 6,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 7,
-    clusters: {},
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [],
-    _configuredReportings: [],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 7,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 8,
-    clusters: {},
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [],
-    _configuredReportings: [],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 8,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 9,
-    clusters: {},
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [],
-    _configuredReportings: [],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 9,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 10,
-    clusters: {},
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [],
-    _configuredReportings: [],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 10,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    deviceIeeeAddress: '0x404ccafffe4974e0'
-    [Symbol(kCapture)]: false
-  },
-  Endpoint {
-    _events: [Object: null prototype] {},
-    _eventsCount: 0,
-    _maxListeners: undefined,
-    deviceID: 12,
-    inputClusters: [1026],
-    outputClusters: [],
-    profileID: 260,
-    ID: 11,
-    clusters: {},
-    deviceIeeeAddress: '0x404ccafffe4974e0',
-    deviceNetworkAddress: 29976,
-    _binds: [],
-    _configuredReportings: [],
-    meta: {},
-    pendingRequests: RequestQueue(0)[Set] {
-      sendInProgress: false,
-      ID: 11,
-      deviceIeeeAddress: '0x404ccafffe4974e0'
-    },
-    [Symbol(shapeMode)]: false,
-    [Symbol(kCapture)]: false
+    convert: [Function: convert]
+  }, {
+    cluster: 'msIlluminanceMeasurement',
+    type: ['attributeReport', 'readResponse'],
+    convert: [Function: convert]
   }
 ]

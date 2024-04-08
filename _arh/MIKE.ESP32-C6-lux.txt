@@ -1,0 +1,3 @@
+
+Illuminance (l1)       21845
+Illuminance Lux (l1)   153
