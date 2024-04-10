@@ -116,43 +116,6 @@ const device = {
   vendor: 'Espressif Systems',
   description: 'Based on Espressif Systems ESP32-C6',
   toZigbee: [],
-  /*
-  fromZigbee: [
-    fz.temperature,
-    fz.ptvo_humidity,
-    fz.ptvo_pressure,
-    custom_illuminance,
-  ],
-  exposes: [
-    e.humidity().withEndpoint('l1').withUnit('%').withDescription('BMX280 humidity sensor #1'),
-    e.pressure().withEndpoint('l1').withUnit('hPa').withDescription('BMX280 pressure sensor #1'),
-    e.temperature().withEndpoint('l1').withUnit('°C').withDescription('BMX280 temperature sensor #1'),
-    //e.illuminance().withEndpoint('l1').withUnit('lux').withDescription('BH1750 illuminance sensor #1'),
-    e.illuminance_lux().withEndpoint('l1').withUnit('luxxx').withDescription('BH1750 illuminance sensor #1, lux'),
-    e.temperature().withEndpoint('l2').withUnit('°C').withDescription('DS18B20 temperature sensor #2'),
-    e.temperature().withEndpoint('l3').withUnit('°C').withDescription('DS18B20 temperature sensor #3'),
-    e.temperature().withEndpoint('l4').withUnit('°C').withDescription('DS18B20 temperature sensor #4'),
-    
-    e.illuminance_lux().withEndpoint('l5').withUnit('luxxx').withDescription('BH1750 illuminance sensor #5, lux'),
-    
-    //-- not using multiple endpoints
-    //e.illuminance().withUnit('lux').withDescription('BH1750 illuminance sensor (root)'),
-    e.illuminance_lux().withUnit('luxxx').withDescription('BH1750 illuminance sensor (root, lux)'),
-  ],
-  meta: {
-    multiEndpoint: true,
-  },
-  endpoint: (device) => {
-  	return {
-  		'l1': 1,
-  		'l2': 2,
-  		'l3': 3,
-  		'l4': 4,
-  		'l5': 5,
-  	};
-  },
-  */
-
   fromZigbee: fromZigbeeC6,
   exposes: expItemsС6,
   meta: {

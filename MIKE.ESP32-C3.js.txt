@@ -1,0 +1,122 @@
+ENDPOINTS: [
+  Endpoint {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    deviceID: 770,
+    inputClusters: [0, 3, 25, 1026, 1024],
+    outputClusters: [],
+    profileID: 260,
+    ID: 1,
+    clusters: {
+      genBasic: [Object],
+      msTemperatureMeasurement: [Object]
+    },
+    deviceIeeeAddress: '0xa4c138e259f910cd',
+    deviceNetworkAddress: 52910,
+    _binds: [],
+    _configuredReportings: [],
+    meta: {},
+    pendingRequests: RequestQueue(0)[Set] {
+      sendInProgress: false,
+      ID: 1,
+      deviceIeeeAddress: '0xa4c138e259f910cd'
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  },
+  Endpoint {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    deviceID: 770,
+    inputClusters: [1026, 1024],
+    outputClusters: [],
+    profileID: 260,
+    ID: 2,
+    clusters: {
+      msTemperatureMeasurement: [Object]
+    },
+    deviceIeeeAddress: '0xa4c138e259f910cd',
+    deviceNetworkAddress: 52910,
+    _binds: [],
+    _configuredReportings: [],
+    meta: {},
+    pendingRequests: RequestQueue(0)[Set] {
+      sendInProgress: false,
+      ID: 2,
+      deviceIeeeAddress: '0xa4c138e259f910cd'
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  },
+  Endpoint {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    deviceID: 770,
+    inputClusters: [1026, 1024],
+    outputClusters: [],
+    profileID: 260,
+    ID: 3,
+    clusters: {},
+    deviceIeeeAddress: '0xa4c138e259f910cd',
+    deviceNetworkAddress: 52910,
+    _binds: [],
+    _configuredReportings: [],
+    meta: {},
+    pendingRequests: RequestQueue(0)[Set] {
+      sendInProgress: false,
+      ID: 3,
+      deviceIeeeAddress: '0xa4c138e259f910cd'
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  },
+  Endpoint {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    deviceID: 770,
+    inputClusters: [1026, 1024],
+    outputClusters: [],
+    profileID: 260,
+    ID: 4,
+    clusters: {},
+    deviceIeeeAddress: '0xa4c138e259f910cd',
+    deviceNetworkAddress: 52910,
+    _binds: [],
+    _configuredReportings: [],
+    meta: {},
+    pendingRequests: RequestQueue(0)[Set] {
+      sendInProgress: false,
+      ID: 4,
+      deviceIeeeAddress: '0xa4c138e259f910cd'
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  },
+  Endpoint {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    deviceID: 770,
+    inputClusters: [1026, 1024],
+    outputClusters: [],
+    profileID: 260,
+    ID: 5,
+    clusters: {},
+    deviceIeeeAddress: '0xa4c138e259f910cd',
+    deviceNetworkAddress: 52910,
+    _binds: [],
+    _configuredReportings: [],
+    meta: {},
+    pendingRequests: RequestQueue(0)[Set] {
+      sendInProgress: false,
+      ID: 5,
+      deviceIeeeAddress: '0xa4c138e259f910cd'
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  }
+]
