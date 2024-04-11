@@ -65,7 +65,20 @@ fz.ptvo_illuminance = {
   },
 };
 
-//-- up to 8 endpoints (1-4: DS18B20, 5: empty, 6: BMX280/BH1750, 7-8: empty)
+const custom_illuminance = {
+  cluster: 'msIlluminanceMeasurement',
+  type: ['attributeReport', 'readResponse'],
+  convert: (model, msg, publish, options, meta) => {
+    // DEPRECATED: only return lux here (change illuminance_lux -> illuminance)
+    const illuminance = msg.data['measuredValue'];
+    const illuminanceLux = (illuminance === 0) ? 0 : (illuminance / 1.2).toFixed(2);
+    return {illuminance: illuminance, illuminance_lux: illuminanceLux};
+    //return {illuminance: illuminanceLux};
+  },
+}
+
+
+//-- up to 8 endpoints (1-3: DS18B20, 4-5: empty, 6: BMX280/BH1750, 7-8: empty)
 //-- the last endpoint number
 const lastEPNumС3 = 6;
 //-- list of exposes
@@ -75,7 +88,7 @@ const epItemsС3 = {};
 
 //-- EndPoints from 1 to lastEPNumС3
 for(let i = 1; i <= lastEPNumС3; i++) {
-	if(i == 5) {
+	if(i == 4 || i == 5) {
 		//-- skipping...
 	} else if(i == 6) {
 		//-- DS18B20
