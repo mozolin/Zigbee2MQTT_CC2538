@@ -153,16 +153,20 @@ const epItemsС3 = {};
 //-- EndPoints from 1 to lastEPNumС3
 for(let i = 1; i <= lastEPNumС3; i++) {
 	if(i == 4) {
-		//-- DS18B20
+		//-- BME280
 		expItemsС3.push(e.temperature().withEndpoint('l4').withUnit('°C').withDescription('BMX280 temperature sensor #4'));
 		expItemsС3.push(e.pressure().withEndpoint('l4').withUnit('hPa').withDescription('BMX280 pressure sensor #4'));
 		expItemsС3.push(e.humidity().withEndpoint('l4').withUnit('%').withDescription('BMX280 humidity sensor #4'));
 		expItemsС3.push(e.illuminance().withEndpoint('l4').withUnit('lux').withDescription('BH1750 #4'));
-		//expItemsС3.push(e.co2().withEndpoint('l4').withUnit('ppm').withDescription('MQ135 #4'));
-	} else if(i == 5 || i == 6) {
-		//expItemsС3.push(e.occupancy().withEndpoint('l'+i).withDescription('PIR Occupancy #'+i));
+	} else if(i == 5) {
+		//-- BME680
+		expItemsС3.push(e.temperature().withEndpoint('l5').withUnit('°C').withDescription('BME680 temperature sensor #5'));
+		expItemsС3.push(e.pressure().withEndpoint('l5').withUnit('hPa').withDescription('BME680 pressure sensor #5'));
+		expItemsС3.push(e.humidity().withEndpoint('l5').withUnit('%').withDescription('BME680 humidity sensor #5'));
+	} else if(i == 6) {
+	
 	} else {
-		//-- 1-3: temperature!
+		//-- DS18B20
 		expItemsС3.push(e.temperature().withEndpoint('l'+i).withUnit('°C').withDescription('DS18B20 temperature sensor #'+i));
 	}
 }
