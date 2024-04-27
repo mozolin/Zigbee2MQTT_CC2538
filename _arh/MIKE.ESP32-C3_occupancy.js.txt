@@ -1,0 +1,94 @@
+{
+  type: 'attributeReport',
+  device: Device {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    _maxListeners: undefined,
+    ID: 2,
+    _applicationVersion: 0,
+    _dateCode: undefined,
+    _endpoints: [
+      [Endpoint],
+      [Endpoint],
+      [Endpoint],
+      [Endpoint],
+      [Endpoint],
+      [Endpoint],
+      [Endpoint],
+      [Endpoint]
+    ],
+    _hardwareVersion: 0,
+    _ieeeAddr: '0xa4c1380a6990a69b',
+    _interviewCompleted: true,
+    _interviewing: false,
+    _lastSeen: 1712932638489,
+    _manufacturerID: 4417,
+    _manufacturerName: 'LilyGo',
+    _modelID: 'MIKE.ESP32-C3',
+    _networkAddress: 38958,
+    _powerSource: 'Mains (single phase)',
+    _softwareBuildID: undefined,
+    _stackVersion: 2,
+    _type: 'Router',
+    _zclVersion: 3,
+    _linkquality: 120,
+    _skipDefaultResponse: false,
+    _skipTimeResponse: false,
+    _deleted: undefined,
+    _defaultSendRequestWhen: 'immediate',
+    _lastDefaultResponseSequenceNumber: 136,
+    _checkinInterval: undefined,
+    _pendingRequestTimeout: 0,
+    meta: {
+      configured: -832699896
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  },
+  endpoint: Endpoint {
+    _events: [Object: null prototype] {},
+    _eventsCount: 0,
+    17: 37 _maxListeners: undefined,
+    deviceID: 80,
+    inputClusters: [1026, 1029, 1027, 1024, 1030],
+    outputClusters: [],
+    profileID: 260,
+    ID: 6,
+    clusters: {
+      msTemperatureMeasurement: [Object],
+      msRelativeHumidity: [Object],
+      msPressureMeasurement: [Object],
+      msIlluminanceMeasurement: [Object],
+      msOccupancySensing: [Object]
+    },
+    deviceIeeeAddress: '0xa4c1380a6990a69b',
+    deviceNetworkAddress: 38958,
+    _binds: [],
+    _configuredReportings: [],
+    meta: {},
+    pendingRequests: RequestQueue(0)[Set] {
+      sendInProgress: false,
+      ID: 6,
+      deviceIeeeAddress: '0xa4c1380a6990a69b'
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false
+  },
+  data: {
+    occupancy: 0
+  },
+  linkquality: 120,
+  groupID: 0,
+  cluster: 'msOccupancySensing',
+  meta: {
+    zclTransactionSequenceNumber: 136,
+    manufacturerCode: null,
+    frameControl: {
+      frameType: 0,
+      manufacturerSpecific: false,
+      direction: 1,
+      disableDefaultResponse: false,
+      reservedBits: 0
+    }
+  }
+}

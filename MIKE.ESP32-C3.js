@@ -101,6 +101,56 @@ const custom_co2 = {
   },
 };
 
+async function onEventSetLocalTime(type, data, device)
+{
+  if(data.type === 'attributeReport' && data.cluster === 'genTime') {
+	  try {	
+	    const endpoint = device.getEndpoint(1);
+	    const time = Math.round((((new Date()).getTime() - constants.OneJanuary2000) / 1000) + (((new Date()).getTimezoneOffset() * -1) * 60));
+      await endpoint.write('genTime', {time: time});
+      console.error("\n\nTIME!", time, "\n\n");
+    } catch(error) {
+      // endpoint.write can throw an error which needs to
+      // be caught or the zigbee-herdsman may crash
+      // Debug message is handled in the zigbee-herdsman
+    }
+  }
+}
+
+const local_time = {
+  cluster: 'genTime',
+  type: ['attributeReport', 'readResponse'],
+  convert: (model, msg, publish, options, meta) => {
+    console.warn("\n\nLOCAL TIME!", msg.data.localTime, "\n\n");
+    return {local_time: msg.data.localTime};
+  }
+};
+
+const custom_analog_input = {
+  cluster: 'genAnalogInput',
+  type: ['attributeReport', 'readResponse'],
+  convert: (model, msg, publish, options, meta) => {
+	  if(msg.data.hasOwnProperty('presentValue')) {
+	  	const analogInput = msg.data.presentValue;
+	  	//console.log("\n!!! AnalogInput !!!", analogInput, "\n");
+	  	return analogInput;
+	  }
+  },
+};
+
+const custom_analog_output = {
+  cluster: 'genAnalogOutput',
+  type: ['attributeReport', 'readResponse'],
+  convert: (model, msg, publish, options, meta) => {
+	  if(msg.data.hasOwnProperty('presentValue')) {
+	  	const analogOutput = msg.data.presentValue;
+	  	//console.log("\n!!! analogOutput !!!", analogOutput, "\n");
+	  	return analogOutput;
+	  }
+  },
+};
+
+
 fz.ptvo_occupancy = {
   // This is for occupancy sensor that only send a message when motion detected,
   // but do not send a motion stop.
@@ -170,8 +220,12 @@ for(let i = 1; i <= lastEPNumС3; i++) {
 		expItemsС3.push(e.temperature().withEndpoint('l'+i).withUnit('°C').withDescription('DS18B20 temperature sensor #'+i));
 	}
 }
+//expItemsС3.push(e.time().withEndpoint('l1').withDescription('TIME sensor #1'));
 expItemsС3.push(e.occupancy().withDescription('PIR Occupancy Root'));
 expItemsС3.push(e.co2().withUnit('ppm').withDescription('MQ135 Root'));
+
+expItemsС3.push(exposes.numeric('local_time', ea.STATE_SET).withDescription('Time'));
+
 
 /*
 function my_pressure()
@@ -197,6 +251,9 @@ const fromZigbeeC3 = [
   //fz.occupancy,
   //fz.co2,
   custom_co2,
+  custom_analog_input,
+  custom_analog_output,
+  local_time,
 ];
 
 
@@ -207,6 +264,7 @@ const definition = {
   description: 'Based on Espressif Systems ESP32-C3 & Telink Semiconductor TLSR8258',
   fromZigbee: fromZigbeeC3,
   toZigbee: [],
+  onEvent: onEventSetLocalTime,
   exposes: expItemsС3,
   meta: {
     multiEndpoint: true,
@@ -223,6 +281,8 @@ const definition = {
     await reporting.bind(endpoint, coordinatorEndpoint, ['msOccupancySensing']);
     await reporting.occupancy(endpoint);
     */
+    const endpoint = device.getEndpoint(1);
+    await reporting.bind(endpoint, coordinatorEndpoint, ['genTime']);
   },
   ota: ota.zigbeeOTA,
   //-- LILIGO logo
