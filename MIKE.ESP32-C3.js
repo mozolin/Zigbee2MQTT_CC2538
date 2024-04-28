@@ -79,28 +79,6 @@ const custom_illuminance = {
   },
 }
 
-const custom_occupancy = {
-  cluster: 'msOccupancySensing',
-  type: ['attributeReport', 'readResponse'],
-  convert: (model, msg, publish, options, meta) => {
-    //console.log(msg);
-    const occupancy = msg.data.occupancy;
-    return {occupancy: (occupancy === 0) ? false : true};
-  },
-};
-
-const custom_co2 = {
-  cluster: 'msCO2',
-  type: ['attributeReport', 'readResponse'],
-  convert: (model, msg, publish, options, meta) => {
-	  if(msg.data.hasOwnProperty('measuredValue')) {
-	  	const co2 = msg.data.measuredValue;
-	  	//console.log("\n!!! CO2 !!!", co2, "\n");
-	  	return {co2: co2};
-	  }
-  },
-};
-
 async function onEventSetLocalTime(type, data, device)
 {
   if(data.type === 'attributeReport' && data.cluster === 'genTime') {
@@ -126,68 +104,51 @@ const local_time = {
   }
 };
 
-const custom_analog_input = {
-  cluster: 'genAnalogInput',
-  type: ['attributeReport', 'readResponse'],
-  convert: (model, msg, publish, options, meta) => {
-	  if(msg.data.hasOwnProperty('presentValue')) {
-	  	const analogInput = msg.data.presentValue;
-	  	//console.log("\n!!! AnalogInput !!!", analogInput, "\n");
-	  	return analogInput;
-	  }
-  },
-};
-
-const custom_analog_output = {
-  cluster: 'genAnalogOutput',
-  type: ['attributeReport', 'readResponse'],
-  convert: (model, msg, publish, options, meta) => {
-	  if(msg.data.hasOwnProperty('presentValue')) {
-	  	const analogOutput = msg.data.presentValue;
-	  	//console.log("\n!!! analogOutput !!!", analogOutput, "\n");
-	  	return analogOutput;
-	  }
-  },
-};
-
-
-fz.ptvo_occupancy = {
-  // This is for occupancy sensor that only send a message when motion detected,
-  // but do not send a motion stop.
-  // Therefore we need to publish the no_motion detected by ourselves.
-  cluster: 'msOccupancySensing',
-  type: ['attributeReport', 'readResponse'],
-  options: [exposes.numeric('motion_wait_timeout').withValueMin(0).withUnit('ms')
-    .withDescription('If a new motion event occurs within the time specified in this option (value is in ms) ' +
-    'after the end of "detection_interval", the "occupancy" state is not cleared')],
-  convert: (model, msg, publish, options, meta) => {
-    if(msg.data.occupancy !== 1) {
-      // In case of 0 no occupancy is reported.
-      // https://github.com/Koenkk/zigbee2mqtt/issues/467
-      return;
-    }
-
-    // The occupancy sensor only sends a message when motion detected.
-    // Therefore we need to publish the no_motion detected by ourselves.
-    let timeout = meta && meta.state && meta.state.hasOwnProperty('detection_interval') ? meta.state.detection_interval : 60;
-    const delay = options && options.hasOwnProperty('motion_wait_timeout') ? options.motion_wait_timeout : 0;
-    if(delay > 0) timeout += delay/1000;
-
-    //console.error('endpoint =', msg.endpoint);
-    
-    // Stop existing timers because motion is detected and set a new one.
-    globalStore.getValue(msg.endpoint, 'timers', []).forEach((t) => clearTimeout(t));
-    globalStore.putValue(msg.endpoint, 'timers', []);
-
-    if(timeout !== 0) {
-      const timer = setTimeout(() => {
-        publish({occupancy: false});
-      }, timeout * 1000);
-
-      globalStore.getValue(msg.endpoint, 'timers').push(timer);
-    }
-
-    return {occupancy: true};
+const fzLocal = {
+  pir_occupancy: {
+  	cluster: 'msOccupancySensing',
+  	type: ['attributeReport', 'readResponse'],
+  	convert: (model, msg, publish, options, meta) => {
+    	const result = {};
+    	if(msg.data.hasOwnProperty('occupancy')) {
+    		const occupancy = msg.data.occupancy;
+    		result.occupancy = (occupancy === 0) ? false : true;
+    	}
+    	return result;
+  	},
+	},
+  mq135_co2: {
+  	cluster: 'msCO2',
+  	type: ['attributeReport', 'readResponse'],
+  	convert: (model, msg, publish, options, meta) => {
+	  	const result = {};
+	  	if(msg.data.hasOwnProperty('measuredValue')) {
+	  		const co2 = msg.data.measuredValue;
+	  		result.co2 = co2;
+	  	}
+	  	return result;
+  	},
+	},
+  bme680_analog_input: {
+    cluster: 'genAnalogInput',
+    type: ['attributeReport', 'readResponse'],
+    convert: (model, msg, publish, options, meta) => {
+    	//-- gas resistance
+    	const result = {};
+    	//console.error("\n??? AnalogInput ???", msg, "\n");
+    	if(msg.data.hasOwnProperty('presentValue')) {
+	  		const analogInput = msg.data.presentValue;
+	  		//console.log("\n!!! AnalogInput !!!", analogInput, "\n");
+	  		if(msg.endpoint.ID == 1) {
+    			result.gas_resistance = parseFloat(analogInput / 100).toFixed(2);
+    		}
+    		if(msg.endpoint.ID == 2) {
+    			result.altitude = analogInput;
+    		}
+	  	}
+			
+	  	return result;
+    },
   },
 };
 
@@ -223,18 +184,10 @@ for(let i = 1; i <= lastEPNumС3; i++) {
 //expItemsС3.push(e.time().withEndpoint('l1').withDescription('TIME sensor #1'));
 expItemsС3.push(e.occupancy().withDescription('PIR Occupancy Root'));
 expItemsС3.push(e.co2().withUnit('ppm').withDescription('MQ135 Root'));
+//expItemsС3.push(e.numeric('local_time', ea.STATE_SET).withDescription('Time'));
+expItemsС3.push(e.numeric('gas_resistance', ea.STATE).withUnit('kOhm').withDescription('BME680 gas resistance'));
+expItemsС3.push(e.numeric('altitude', ea.STATE).withUnit('m').withDescription('BME680 altitude'));
 
-expItemsС3.push(exposes.numeric('local_time', ea.STATE_SET).withDescription('Time'));
-
-
-/*
-function my_pressure()
-{
-	console.log(e.pressure())
-	return e.pressure();
-}
-expItemsС3.push(my_pressure().withEndpoint('l5').withUnit('xyz').withDescription('??? sensor #5'));
-*/
 
 //-- list of EP substitutions
 for(let i = 1; i <= lastEPNumС3; i++) {
@@ -246,14 +199,10 @@ const fromZigbeeC3 = [
   fz.ptvo_humidity,
   fz.ptvo_pressure,
   fz.ptvo_illuminance,
-  //fz.ptvo_occupancy,
-  custom_occupancy,
-  //fz.occupancy,
-  //fz.co2,
-  custom_co2,
-  custom_analog_input,
-  custom_analog_output,
-  local_time,
+  fzLocal.pir_occupancy,
+  fzLocal.mq135_co2,
+  //local_time,
+  fzLocal.bme680_analog_input,
 ];
 
 
@@ -282,7 +231,7 @@ const definition = {
     await reporting.occupancy(endpoint);
     */
     const endpoint = device.getEndpoint(1);
-    await reporting.bind(endpoint, coordinatorEndpoint, ['genTime']);
+    await reporting.bind(endpoint, coordinatorEndpoint, ['genAnalogInput']);
   },
   ota: ota.zigbeeOTA,
   //-- LILIGO logo
