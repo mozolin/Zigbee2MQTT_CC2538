@@ -67,24 +67,12 @@ fz.ptvo_illuminance = {
   },
 };
 
-const custom_illuminance = {
-  cluster: 'msIlluminanceMeasurement',
-  type: ['attributeReport', 'readResponse'],
-  convert: (model, msg, publish, options, meta) => {
-    // DEPRECATED: only return lux here (change illuminance_lux -> illuminance)
-    const illuminance = msg.data['measuredValue'];
-    const illuminanceLux = (illuminance === 0) ? 0 : (illuminance / 1.2).toFixed(2);
-    return {illuminance: illuminance, illuminance_lux: illuminanceLux};
-    //return {illuminance: illuminanceLux};
-  },
-}
-
 async function onEventSetLocalTime(type, data, device)
 {
   if(data.type === 'attributeReport' && data.cluster === 'genTime') {
-	  try {	
-	    const endpoint = device.getEndpoint(1);
-	    const time = Math.round((((new Date()).getTime() - constants.OneJanuary2000) / 1000) + (((new Date()).getTimezoneOffset() * -1) * 60));
+    try {  
+      const endpoint = device.getEndpoint(1);
+      const time = Math.round((((new Date()).getTime() - constants.OneJanuary2000) / 1000) + (((new Date()).getTimezoneOffset() * -1) * 60));
       await endpoint.write('genTime', {time: time});
       console.error("\n\nTIME!", time, "\n\n");
     } catch(error) {
@@ -95,59 +83,92 @@ async function onEventSetLocalTime(type, data, device)
   }
 }
 
-const local_time = {
-  cluster: 'genTime',
-  type: ['attributeReport', 'readResponse'],
-  convert: (model, msg, publish, options, meta) => {
-    console.warn("\n\nLOCAL TIME!", msg.data.localTime, "\n\n");
-    return {local_time: msg.data.localTime};
-  }
-};
+
 
 const fzLocal = {
   pir_occupancy: {
-  	cluster: 'msOccupancySensing',
-  	type: ['attributeReport', 'readResponse'],
-  	convert: (model, msg, publish, options, meta) => {
-    	const result = {};
-    	if(msg.data.hasOwnProperty('occupancy')) {
-    		const occupancy = msg.data.occupancy;
-    		result.occupancy = (occupancy === 0) ? false : true;
-    	}
-    	return result;
-  	},
-	},
+    cluster: 'msOccupancySensing',
+    type: ['attributeReport', 'readResponse'],
+    convert: (model, msg, publish, options, meta) => {
+      const result = {};
+      if(msg.data.hasOwnProperty('occupancy')) {
+        const occupancy = msg.data.occupancy;
+        result.occupancy = (occupancy === 0) ? false : true;
+      }
+      return result;
+    },
+  },
   mq135_co2: {
-  	cluster: 'msCO2',
-  	type: ['attributeReport', 'readResponse'],
-  	convert: (model, msg, publish, options, meta) => {
-	  	const result = {};
-	  	if(msg.data.hasOwnProperty('measuredValue')) {
-	  		const co2 = msg.data.measuredValue;
-	  		result.co2 = co2;
-	  	}
-	  	return result;
-  	},
-	},
+    cluster: 'msCO2',
+    type: ['attributeReport', 'readResponse'],
+    convert: (model, msg, publish, options, meta) => {
+      const result = {};
+      if(msg.data.hasOwnProperty('measuredValue')) {
+        const co2 = msg.data.measuredValue;
+        result.co2 = co2;
+      }
+      return result;
+    },
+  },
   bme680_analog_input: {
     cluster: 'genAnalogInput',
     type: ['attributeReport', 'readResponse'],
     convert: (model, msg, publish, options, meta) => {
-    	//-- gas resistance
-    	const result = {};
-    	//console.error("\n??? AnalogInput ???", msg, "\n");
-    	if(msg.data.hasOwnProperty('presentValue')) {
-	  		const analogInput = msg.data.presentValue;
-	  		//console.log("\n!!! AnalogInput !!!", analogInput, "\n");
-	  		if(msg.endpoint.ID == 1) {
-    			result.gas_resistance = parseFloat(analogInput / 100).toFixed(2);
-    		}
-    		if(msg.endpoint.ID == 2) {
-    			result.altitude = analogInput;
-    		}
-	  	}
-			
-	  	return result;
+      //-- gas resistance
+      const result = {};
+      //console.error("\n??? AnalogInput ???", msg, "\n");
+      if(msg.data.hasOwnProperty('presentValue')) {
+        const analogInput = msg.data.presentValue;
+        //console.log("\n!!! AnalogInput !!!", analogInput, "\n");
+        if(msg.endpoint.ID == 1) {
+          result.gas_resistance = parseFloat(analogInput / 100).toFixed(2);
+        }
+        if(msg.endpoint.ID == 2) {
+          result.altitude = parseFloat(analogInput / 100).toFixed(2);
+        }
+      }
+      return result;
+    },
+  },
+  mq135_analog_input: {
+    cluster: 'genAnalogInput',
+    type: ['attributeReport', 'readResponse'],
+    convert: (model, msg, publish, options, meta) => {
+      const result = {};
+      //console.error("\n??? AnalogInput ???", msg, "\n");
+      if(msg.data.hasOwnProperty('presentValue')) {
+        const analogInput = msg.data.presentValue;
+        //console.log("\n!!! AnalogInput !!!", analogInput, "\n");
+        if(msg.endpoint.ID == 3) {
+          result.gas_co = parseFloat(analogInput / 100).toFixed(2);
+        }
+        if(msg.endpoint.ID == 4) {
+          result.gas_alcohol = parseFloat(analogInput / 100).toFixed(2);
+        }
+        if(msg.endpoint.ID == 5) {
+          result.gas_toluen = parseFloat(analogInput / 100).toFixed(2);
+        }
+        if(msg.endpoint.ID == 6) {
+          result.gas_nh4 = parseFloat(analogInput / 100).toFixed(2);
+        }
+        if(msg.endpoint.ID == 7) {
+          result.gas_aceton = parseFloat(analogInput / 100).toFixed(2);
+        }
+      }
+      return result;
+    },
+  },
+  local_time: {
+    cluster: 'genTime',
+    type: ['attributeReport', 'readResponse'],
+    convert: (model, msg, publish, options, meta) => {
+      console.warn("\n\nLOCAL TIME!", msg, "\n\n");
+      
+      const result = {};
+      if(msg.data.hasOwnProperty('localTime')) {
+        result.local_time = msg.data.localTime;
+      }
+      return result;
     },
   },
 };
@@ -163,35 +184,39 @@ const epItemsС3 = {};
 
 //-- EndPoints from 1 to lastEPNumС3
 for(let i = 1; i <= lastEPNumС3; i++) {
-	if(i == 4) {
-		//-- BME280
-		expItemsС3.push(e.temperature().withEndpoint('l4').withUnit('°C').withDescription('BMX280 temperature sensor #4'));
-		expItemsС3.push(e.pressure().withEndpoint('l4').withUnit('hPa').withDescription('BMX280 pressure sensor #4'));
-		expItemsС3.push(e.humidity().withEndpoint('l4').withUnit('%').withDescription('BMX280 humidity sensor #4'));
-		expItemsС3.push(e.illuminance().withEndpoint('l4').withUnit('lux').withDescription('BH1750 #4'));
-	} else if(i == 5) {
-		//-- BME680
-		expItemsС3.push(e.temperature().withEndpoint('l5').withUnit('°C').withDescription('BME680 temperature sensor #5'));
-		expItemsС3.push(e.pressure().withEndpoint('l5').withUnit('hPa').withDescription('BME680 pressure sensor #5'));
-		expItemsС3.push(e.humidity().withEndpoint('l5').withUnit('%').withDescription('BME680 humidity sensor #5'));
-	} else if(i == 6) {
-	
-	} else {
-		//-- DS18B20
-		expItemsС3.push(e.temperature().withEndpoint('l'+i).withUnit('°C').withDescription('DS18B20 temperature sensor #'+i));
-	}
+  if(i == 4) {
+    //-- BME280
+    expItemsС3.push(e.temperature().withEndpoint('l4').withUnit('°C').withDescription('BMX280 temperature sensor #4'));
+    expItemsС3.push(e.pressure().withEndpoint('l4').withUnit('hPa').withDescription('BMX280 pressure sensor #4'));
+    expItemsС3.push(e.humidity().withEndpoint('l4').withUnit('%').withDescription('BMX280 humidity sensor #4'));
+    expItemsС3.push(e.illuminance().withEndpoint('l4').withUnit('lux').withDescription('BH1750 #4'));
+  } else if(i == 5) {
+    //-- BME680
+    expItemsС3.push(e.temperature().withEndpoint('l5').withUnit('°C').withDescription('BME680 temperature sensor #5'));
+    expItemsС3.push(e.pressure().withEndpoint('l5').withUnit('hPa').withDescription('BME680 pressure sensor #5'));
+    expItemsС3.push(e.humidity().withEndpoint('l5').withUnit('%').withDescription('BME680 humidity sensor #5'));
+  } else if(i == 6) {
+  
+  } else {
+    //-- DS18B20
+    expItemsС3.push(e.temperature().withEndpoint('l'+i).withUnit('°C').withDescription('DS18B20 temperature sensor #'+i));
+  }
 }
-//expItemsС3.push(e.time().withEndpoint('l1').withDescription('TIME sensor #1'));
 expItemsС3.push(e.occupancy().withDescription('PIR Occupancy Root'));
 expItemsС3.push(e.co2().withUnit('ppm').withDescription('MQ135 Root'));
-//expItemsС3.push(e.numeric('local_time', ea.STATE_SET).withDescription('Time'));
+expItemsС3.push(e.numeric('local_time', ea.STATE).withDescription('Time'));
 expItemsС3.push(e.numeric('gas_resistance', ea.STATE).withUnit('kOhm').withDescription('BME680 gas resistance'));
 expItemsС3.push(e.numeric('altitude', ea.STATE).withUnit('m').withDescription('BME680 altitude'));
 
+expItemsС3.push(e.numeric('gas_co', ea.STATE).withDescription('MQ135 gas CO'));
+expItemsС3.push(e.numeric('gas_alcohol', ea.STATE).withDescription('MQ135 gas alcohol'));
+expItemsС3.push(e.numeric('gas_toluen', ea.STATE).withDescription('MQ135 gas toluen'));
+expItemsС3.push(e.numeric('gas_nh4', ea.STATE).withDescription('MQ135 gas NH4'));
+expItemsС3.push(e.numeric('gas_aceton', ea.STATE).withDescription('MQ135 gas aceton'));
 
 //-- list of EP substitutions
 for(let i = 1; i <= lastEPNumС3; i++) {
-	epItemsС3['l'+i] = i;
+  epItemsС3['l'+i] = i;
 }
 //-- list of fromZigbee itmes 
 const fromZigbeeC3 = [
@@ -201,8 +226,9 @@ const fromZigbeeC3 = [
   fz.ptvo_illuminance,
   fzLocal.pir_occupancy,
   fzLocal.mq135_co2,
-  //local_time,
   fzLocal.bme680_analog_input,
+  fzLocal.mq135_analog_input,
+  fzLocal.local_time,
 ];
 
 
@@ -222,16 +248,17 @@ const definition = {
     return epItemsС3;
   },
   configure: async (device, coordinatorEndpoint, logger) => {
-  	//console.log('coordinatorEndpoint:', coordinatorEndpoint);  
-  	//console.log('ENDPOINTS:', device.endpoints);  
-  	//console.log(expItemsС3);
-  	/*
-  	const endpoint = device.getEndpoint(1);
+    //console.log('coordinatorEndpoint:', coordinatorEndpoint);  
+    //console.log('ENDPOINTS:', device.endpoints);  
+    //console.log(expItemsС3);
+    /*
+    const endpoint = device.getEndpoint(1);
     await reporting.bind(endpoint, coordinatorEndpoint, ['msOccupancySensing']);
     await reporting.occupancy(endpoint);
-    */
+    
     const endpoint = device.getEndpoint(1);
     await reporting.bind(endpoint, coordinatorEndpoint, ['genAnalogInput']);
+    */
   },
   ota: ota.zigbeeOTA,
   //-- LILIGO logo
