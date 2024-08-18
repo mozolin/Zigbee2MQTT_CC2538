@@ -5,7 +5,7 @@ const fz = require('zigbee-herdsman-converters/converters/fromZigbee');
 const tz = require('zigbee-herdsman-converters/converters/toZigbee');
 const exposes = require('zigbee-herdsman-converters/lib/exposes');
 const reporting = require('zigbee-herdsman-converters/lib/reporting');
-const extend = require('zigbee-herdsman-converters/lib/extend');
+//const extend = require('zigbee-herdsman-converters/lib/extend');
 const e = exposes.presets;
 const ea = exposes.access;
 const ota = require('zigbee-herdsman-converters/lib/ota');
@@ -98,18 +98,6 @@ const fzLocal = {
       return result;
     },
   },
-  mq135_co2: {
-    cluster: 'msCO2',
-    type: ['attributeReport', 'readResponse'],
-    convert: (model, msg, publish, options, meta) => {
-      const result = {};
-      if(msg.data.hasOwnProperty('measuredValue')) {
-        const co2 = msg.data.measuredValue;
-        result.co2 = co2;
-      }
-      return result;
-    },
-  },
   bme680_analog_input: {
     cluster: 'genAnalogInput',
     type: ['attributeReport', 'readResponse'],
@@ -125,34 +113,6 @@ const fzLocal = {
         }
         if(msg.endpoint.ID == 2) {
           result.altitude = parseFloat(analogInput / 100).toFixed(2);
-        }
-      }
-      return result;
-    },
-  },
-  mq135_analog_input: {
-    cluster: 'genAnalogInput',
-    type: ['attributeReport', 'readResponse'],
-    convert: (model, msg, publish, options, meta) => {
-      const result = {};
-      //console.error("\n??? AnalogInput ???", msg, "\n");
-      if(msg.data.hasOwnProperty('presentValue')) {
-        const analogInput = msg.data.presentValue;
-        //console.log("\n!!! AnalogInput !!!", analogInput, "\n");
-        if(msg.endpoint.ID == 3) {
-          result.gas_co = parseFloat(analogInput / 100).toFixed(2);
-        }
-        if(msg.endpoint.ID == 4) {
-          result.gas_alcohol = parseFloat(analogInput / 100).toFixed(2);
-        }
-        if(msg.endpoint.ID == 5) {
-          result.gas_toluen = parseFloat(analogInput / 100).toFixed(2);
-        }
-        if(msg.endpoint.ID == 6) {
-          result.gas_nh4 = parseFloat(analogInput / 100).toFixed(2);
-        }
-        if(msg.endpoint.ID == 7) {
-          result.gas_aceton = parseFloat(analogInput / 100).toFixed(2);
         }
       }
       return result;
@@ -176,7 +136,7 @@ const fzLocal = {
 
 //-- up to 8 endpoints (1-3:DS18B20, 4:BMX280/BH1750/MQ135, 5-6:PIR, 7-8:empty)
 //-- the last endpoint number
-const lastEPNumС3 = 5;
+const lastEPNumС3 = 8;
 //-- list of exposes
 const expItemsС3 = [];
 //-- endpoints substitution "l1: 1"
@@ -197,7 +157,7 @@ for(let i = 1; i <= lastEPNumС3; i++) {
     expItemsС3.push(e.humidity().withEndpoint('l5').withUnit('%').withDescription('BME680 humidity sensor #5'));
   } else if(i == 6) {
   
-  } else {
+  } else if(i == 1 || i == 2 || i == 3) {
     //-- DS18B20
     expItemsС3.push(e.temperature().withEndpoint('l'+i).withUnit('°C').withDescription('DS18B20 temperature sensor #'+i));
   }
@@ -208,26 +168,18 @@ expItemsС3.push(e.numeric('local_time', ea.STATE).withDescription('Time'));
 expItemsС3.push(e.numeric('gas_resistance', ea.STATE).withUnit('kOhm').withDescription('BME680 gas resistance'));
 expItemsС3.push(e.numeric('altitude', ea.STATE).withUnit('m').withDescription('BME680 altitude'));
 
-expItemsС3.push(e.numeric('gas_co', ea.STATE).withDescription('MQ135 gas CO'));
-expItemsС3.push(e.numeric('gas_alcohol', ea.STATE).withDescription('MQ135 gas alcohol'));
-expItemsС3.push(e.numeric('gas_toluen', ea.STATE).withDescription('MQ135 gas toluen'));
-expItemsС3.push(e.numeric('gas_nh4', ea.STATE).withDescription('MQ135 gas NH4'));
-expItemsС3.push(e.numeric('gas_aceton', ea.STATE).withDescription('MQ135 gas aceton'));
-
 //-- list of EP substitutions
 for(let i = 1; i <= lastEPNumС3; i++) {
   epItemsС3['l'+i] = i;
 }
-//-- list of fromZigbee itmes 
+//-- list of fromZigbee items 
 const fromZigbeeC3 = [
   fz.temperature,
   fz.ptvo_humidity,
   fz.ptvo_pressure,
   fz.ptvo_illuminance,
   fzLocal.pir_occupancy,
-  fzLocal.mq135_co2,
   fzLocal.bme680_analog_input,
-  fzLocal.mq135_analog_input,
   fzLocal.local_time,
 ];
 
@@ -236,7 +188,7 @@ const definition = {
   zigbeeModel: ['MIKE.ESP32-C3'],
   model: 'MIKE.ESP32-C3',
   vendor: 'LilyGo',
-  description: 'Based on Espressif Systems ESP32-C3 & Telink Semiconductor TLSR8258',
+  description: 'Based on Espressif Systems ESP32-C3 & Telink Semiconductor TLSR8258 (Board #1)',
   fromZigbee: fromZigbeeC3,
   toZigbee: [],
   onEvent: onEventSetLocalTime,

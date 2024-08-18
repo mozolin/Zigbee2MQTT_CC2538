@@ -9,27 +9,28 @@ mqtt:
   user: mqtt
   version: 4
 serial:
-  port: \\.\COM4
+  port: \\.\COM3
+  adapter: zstack
 advanced:
-  pan_id: 44010
-  channel: 14
+  pan_id: 6753
+  channel: 11
   network_key:
-    - 247
-    - 217
-    - 72
-    - 83
-    - 103
-    - 12
-    - 71
+    - 2
+    - 4
+    - 5
     - 8
-    - 190
-    - 130
-    - 138
-    - 174
-    - 255
-    - 129
-    - 149
-    - 241
+    - 9
+    - 11
+    - 13
+    - 15
+    - 1
+    - 3
+    - 4
+    - 5
+    - 6
+    - 10
+    - 12
+    - 13
   homeassistant_legacy_entity_attributes: false
   legacy_api: false
   legacy_availability_payload: false
@@ -40,9 +41,11 @@ device_options:
 frontend:
   port: 8080
 devices: devices.yaml
+groups: groups.yaml
 external_converters:
-  #- MIKE.CC2530.js
-  - MIKE.ESP32-C3.js
+  - MIKE.CC2530.js
+  #- MIKE.ESP32-C3.js
+  #- MIKE.ESP32-C3-2.js
   #- MIKE.ESP32-C6.js
   #- MIKE.ESP32C6_CO2.js
 availability: false
