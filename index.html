@@ -1,0 +1,17 @@
+<head>
+<script>
+  const d = new Date();
+  
+  const OneJanuary2000 = new Date('January 01, 2000 00:00:00 UTC+00:00').getTime();
+
+  const t = d.getTime();
+  const tz = d.getTimezoneOffset();
+  
+  const t1 = (t - OneJanuary2000) / 1000;
+  const t2 = (tz * -1) * 60;
+  const time = Math.round(t1 + t2);
+  
+  console.log(time);
+
+</script>
+</head>
